@@ -1,0 +1,105 @@
+//BMI計算機、GridLayoutを使って表示
+//ファイル名：BMI.java
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JPanel;
+
+
+public class BMI extends JFrame implements ActionListener {
+	JTextField textField1;
+	JTextField textField2;
+	JTextField textField3;
+	JTextField textField4;
+	JButton keisan;
+	JButton risou;
+	JButton reset;
+
+	//コンストラクタ
+	BMI(String title){
+		super(title);
+
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(480,200);
+		setLocationByPlatform(true);
+
+		//パネルのレイアウトは縦4×横2のグリッド
+		JPanel panel = new JPanel();
+		panel.setLayout(new GridLayout(4,2));
+		JLabel label1 =new JLabel("身長を入れて下さい(cm)");
+		label1.setHorizontalAlignment(JLabel.RIGHT);//右寄せ
+		label1.setVerticalAlignment(JLabel.CENTER);//中央
+		textField1=new JTextField(20);
+		JLabel label2 =new JLabel("体重を入れて下さい(kg)");
+		label2.setHorizontalAlignment(JLabel.RIGHT);
+		label2.setVerticalAlignment(JLabel.CENTER);
+		textField2=new JTextField(20);
+		JLabel label3 =new JLabel("BMI");
+		label3.setHorizontalAlignment(JLabel.RIGHT);
+		label3.setVerticalAlignment(JLabel.CENTER);
+		textField3=new JTextField(20);
+		JLabel label4 =new JLabel("理想体重(kg)");
+		label4.setHorizontalAlignment(JLabel.RIGHT);
+		label4.setVerticalAlignment(JLabel.CENTER);
+		textField4=new JTextField(20);
+
+		panel.add(label1);      //1行1列
+		panel.add(textField1);  //1行2列
+		panel.add(label2);      //2行1列
+		panel.add(textField2);  //2行2列
+		panel.add(label3);      //3行1列
+		panel.add(textField3);  //3行2列
+		panel.add(label4);      //4行1列
+		panel.add(textField4);  //4行2列
+		add(panel,BorderLayout.CENTER); //パネルをボーダーレイアウトの中央に配置
+		
+		//パネル2のレイアウトは縦1×横3のグリッド
+		JPanel panel2 = new JPanel();
+		panel2.setLayout(new GridLayout(1,3));
+		
+		keisan =new JButton("計算");      //計算ボタンを生成
+		keisan.addActionListener(this);  //押されたらこのフレームのイベントとする
+		risou = new JButton("理想計算");  //理想計算ボタンを生成する
+		risou.addActionListener(this);
+		reset = new JButton("リセット");    //リセットボタンを生成する
+		reset.addActionListener(this);
+		
+		panel2.add(keisan);//左
+		panel2.add(risou);//中央
+		panel2.add(reset);//右
+		add(panel2,BorderLayout.SOUTH);//パネル2をボーダーレイアウトの下に配置
+	}
+    //メインルーチン
+	public static void main(String args[]) {
+		BMI frame = new BMI ("BMIの計算、理想体重計算、リセット");
+		frame.setVisible(true);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		JButton btn= (JButton)e.getSource();//ボタンを得る
+		float h = Float.parseFloat(textField1.getText());//身長を得る
+		h=h/100;//ｃｍをｍに直す
+		if(btn==keisan) {//計算ボタンか確認する
+			int w = Integer.parseInt(textField2.getText());//体重を得る
+			float bmi = w/(h*h);//BMIを計算
+			textField3.setText(""+bmi);//BMIセットする
+		}
+		if(btn==risou) {//理想計算ボタンか確認する
+			float risou = h*h*22;//理想値を計算する
+			textField4.setText(""+risou);//理想値をセットする
+		}
+		if(btn==reset) {//リセットボタンか確認する
+			textField1.setText("");//空白をセットする
+			textField2.setText("");
+			textField3.setText("");
+			textField4.setText("");
+		}
+	}
+}

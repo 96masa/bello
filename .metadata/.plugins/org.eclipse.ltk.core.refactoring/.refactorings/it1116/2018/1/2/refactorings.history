@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;ReadDocument.java&apos; to &apos;Inroom/src/(デフォルト・パッケージ)&apos;&#x0D;&#x0A;- 元のプロジェクト: &apos;it1116&apos;&#x0D;&#x0A;- 宛先要素: &apos;Inroom/src/(デフォルト・パッケージ)&apos;&#x0D;&#x0A;- オリジナル要素: &apos;ReadDocument.java&apos;" description="コンパイル単位をコピー" destination="=Inroom/src&lt;" element1="/src&lt;{ReadDocument.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1515645094757" units="1" version="1.0"/>
+</session>

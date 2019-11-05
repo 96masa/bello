@@ -1,0 +1,346 @@
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.GridLayout;
+import java.awt.Panel;
+import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.beans.Expression;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import jp.fit.jc.it.BorderView;
+import jp.fit.jc.it.CharacterView;
+import jp.fit.jc.it.ColorView;
+import jp.fit.jc.it.CombinedView;
+import jp.fit.jc.it.DrawItem;
+import jp.fit.jc.it.GroupView;
+import jp.fit.jc.it.PPanel2;
+import jp.fit.jc.it.StringView;
+
+// 因子の部屋
+// Sample2607 を変更して(全面改訂して)作る
+
+public class Insiroom extends JFrame implements ActionListener{
+	static String XMLFileName = "Inroom.xml";
+
+	static String mondai[];
+	static String kotae[];
+	static int gmap[][] = {
+			{1,1,2,3,4},
+			{5,5,2,3,4},
+			{6,7,7,8,9},
+			{6,10,10,8,9},
+			{6,11,11,8,9},
+	};
+
+
+
+	// 操作ボタン
+	JButton reset,check,next,end; //
+	InsiroomPanel panel,panel2;
+	JButton[] buttons; //削除と番号ボタンの配列
+	static int number;//問題番号
+	Element doc; // XML ファイルの内容が入る。
+	Element xMondai; // XML形式の問題(1問のみ)
+
+	public  Insiroom(int n,String xml) {
+
+		super(); // いつもの設定
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationByPlatform(true);
+		setLayout(new BorderLayout());
+		setSize(600,400);
+
+		doc = ReadDocument.read(xml); // XMLを全て読み出しておく
+		number = 0;                   // 問題番号は最初にする。
+
+		// タイトルを取り出してセットする。
+		NodeList nl = doc.getElementsByTagName("title");     // タイトルタグ部分を得る
+		setTitle(nl.item(0).getFirstChild().getNodeValue()); // 中身を取り出しタイトルバーにセット
+
+		// 最初の問題を取り出してセットする。
+		xMondai = (Element) doc.getElementsByTagName("Mondai").item(number);
+		mondai = getStrings(xMondai,"question"); // 問題を取り出す。
+		kotae  = getStrings(xMondai,"answer");    // 答えを取り出す
+
+
+		int w = mondai[0].length(); // 横幅
+		int h = mondai.length;      // 行数
+		panel = new InsiroomPanel(w,h,this); // パネルを作る
+		add(panel,BorderLayout.CENTER);
+		panel.setMondai(mondai); // 問題をセットする。
+		panel.setMain(mondai);
+		InsiroomPanel panel2 = new InsiroomPanel(gmap[0].length,gmap.length,this);
+		add(panel,BorderLayout.CENTER);
+		panel.setGroupMap(gmap); // データをセット
+
+
+
+		panel.setS1(0,0,"4");
+		panel.setS1(2, 0, "10");
+		panel.setS1(3, 0, "12");
+		panel.setS1(4, 0, "5");
+		panel.setS1(0, 1, "6");
+		panel.setS1(0, 2, "60");
+		panel.setS1(1, 2, "4");
+		panel.setS1(3, 2, "10");
+		panel.setS1(4, 2, "24");
+		panel.setS1(1, 3, "15");
+		panel.setS1(1, 4, "2");
+
+
+		// 操作ボタンを左パネルに貼り付ける。
+		JPanel lp = new JPanel();
+		lp.setLayout(new GridLayout(6,1)); // グリッドレイアウトで6個のボタンまで
+		JPanel bpanel = new JPanel();
+		bpanel.setLayout(new GridLayout(2,3));
+
+
+		buttons = new JButton[6];
+		buttons[0] = new JButton("del");
+		buttons[0].addActionListener(this);
+		reset = new JButton("リセット"); // ボタンを作る
+		reset.addActionListener(this);
+		check = new JButton("チェック");
+		check.addActionListener(this);
+		next = new JButton("次の問題");
+		next.addActionListener(this);
+		end = new JButton("終了");
+		end.addActionListener(this);
+
+
+		lp.add(reset);		// ボタンを配置する。
+		lp.add(check);
+		lp.add(next);
+		lp.add(end);
+		bpanel.add(buttons[0]);
+		for(int i = 1;i<=5; i++) {
+			buttons[i] = new JButton(""+i);
+			buttons[i].addActionListener(this);//アクションリスナーを装着し
+			bpanel.add(buttons[i]);                //パネルに張り付ける
+		}
+		add(lp,BorderLayout.WEST); // 左パネルを左に配置
+		add(bpanel,BorderLayout.SOUTH);
+
+
+	}
+
+	// メインルーチン
+	public static void main(String args[]) {
+		Insiroom frame = new Insiroom(number, XMLFileName);
+		frame.setVisible(true);
+		Insiroom sp = new Insiroom(1,XMLFileName); // 最初の問題
+	    sp.setVisible(true);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		JButton btn = (JButton)e.getSource(); // ボタンを得る
+		if( btn == reset ) { // リセットボタンかチェックする。
+			int ret = JOptionPane.showConfirmDialog(null,
+					"リセットしますか？", "リセット", JOptionPane.YES_NO_OPTION);
+			if(ret==JOptionPane.YES_OPTION) {
+				panel.setMondai(mondai);//「はい」を選択したときの処理
+				repaint();
+			} else {
+			    // 何もせずダイアログを閉じる
+			}
+		} else if( btn == check) { // チェックボタンか
+			String[] chare = panel.getCharaenge();
+			for(int i = 0; i<chare.length;i++) { // 答えを印刷する
+				System.out.println(chare[i]);
+			}
+			if(checkAnswer(kotae,chare)) { // 正解
+				JOptionPane.showMessageDialog(null, "おめでとうございます。",
+					        "正解です", JOptionPane.INFORMATION_MESSAGE); // 正解と表示：簡易バージョンなのでこのままは不可
+			} else {
+				JOptionPane.showMessageDialog(null, "残念！どこか間違っています。",
+					        "不正解！", JOptionPane.ERROR_MESSAGE);// 不正解と表示：簡易バージョンなのでこのままは不可				}
+			}
+
+			if(btn == next) { // 次の問題：未実装
+			int ret = JOptionPane.showConfirmDialog(null,
+					"次の問題に進みますか？", "確認", JOptionPane.YES_NO_OPTION);
+			if(ret==JOptionPane.YES_OPTION) {
+				Insiroom next = new Insiroom(2,XMLFileName); // 新しい問題用のフレームを作る
+		        next.setVisible(true); // 新しいフレームを可視化
+		        dispose(); // 現在のフレームを消滅させる。
+
+				
+				}
+				// 番号の問題を取り出してセットする。
+				xMondai = (Element) mn.item(number);
+				mondai = getStrings(xMondai,"question"); // 問題を取り出す。
+				kotae  = getStrings(xMondai,"answer");    // 答えを取り出す
+
+				panel.setMondai(mondai); // 問題をセットする。
+				repaint();}
+			} else {
+			    // 何もせずダイアログを閉じる
+			
+
+			} if(btn == end) { // 終了ボタン：確認を入れるべき
+			int ret = JOptionPane.showConfirmDialog(null,
+					"因子の部屋を終了しますか？", "ゲーム終了", JOptionPane.YES_NO_OPTION);
+			if(ret==JOptionPane.YES_OPTION) {
+				System.exit(0);
+			} else {
+			    // 何もせずダイアログを閉じる
+			}
+
+		}
+		else if(btn == buttons[0]) { // 削除ボタン
+			panel.setLetter('\0'); // ナル文字をセットする。
+		} else { //数字(文字)ボタン、他にもボタンがある場合は最後に持ってくる
+			String text = btn.getText(); // ボタンの文字を得る
+			panel.setLetter(text.charAt(0)); // ボタンの文字の最初の1つをセット
+		}
+	}
+
+	// 答えを正解と比較する。
+	boolean checkAnswer(String[] a, String[] b) {
+		if(a.length != b.length) { // そもそも大きさが違う
+			return false;
+		}
+		for(int i = 0; i < a.length; i++) { // １行ごとに比較する
+			if(! a[i].equals(b[i])) {
+				return false;               // 違ったら、偽を返す
+			}
+		}
+		return true;    // 全ての行が一致した。
+	}
+
+	// 問題や答えの文字列の並びを得る（答え合わせページに詳細）
+		String[] getStrings(Element mondai,String tag) {
+			String s[];
+			NodeList nl = mondai.getElementsByTagName(tag);
+			s = new String[nl.getLength()];
+			for(int i = 0; i < nl.getLength() ;i++) {
+				try {
+					s[i] = nl.item(i).getFirstChild().getNodeValue();
+				} catch(Exception e) {
+					s[i] = "";
+				}
+			}
+			return s;
+		}
+
+}
+
+
+class InsiroomPanel extends PPanel2 implements MouseListener{         // マウスリスナを装着し、マウスクリックに備える。
+    CharacterView chview; // 文字を描画するビュー
+    ColorView     colview;//文字を入力する色付きユニットを出すためのビュー
+    Point cur;			   // 文字を入力する位置
+    StringView    s1view;
+    GroupView gview; // グループで分割するビュー
+
+    // 背景が黒の文字を描くための反転文字クラス
+    class DrawInvert extends DrawItem {
+
+		public DrawInvert(PPanel2 p) {
+			super(p);
+		}
+		@Override
+		public void draw(Graphics g, int px, int py, char ch) {
+	    	int x = getOriginX(px); // 座標値を計算する
+	    	int y = getOriginY(py);
+			chview.drawChar(g, px, py, ch);
+		}
+    }
+
+
+
+    InsiroomPanel(int x, int y, JFrame f) {
+		super(x,y,f);
+		colview = new ColorView(this);
+		addPView(colview);
+		chview = new CharacterView(this);
+		addPView(chview);
+		addPView(new BorderView(this, BorderView.FULL_BORDER,Color.black));
+		cur = null;
+		addMouseListener(this); // マウスリスナ装着
+		chview = new CharacterView(this); // 大きな文字のビュー（１文字）
+		addPView(chview);
+
+		s1view = new StringView(this,StringView.SMALL_NW); // 左上に小さな文字
+		addPView(s1view);
+		addPView(new BorderView(this, BorderView.FULL_BORDER,Color.black));
+		gview = new GroupView(this);
+		addPView(gview);
+
+	}
+    void setGroupMap(int[][] gmap) {
+		gview.setGroupMap(gmap);
+	}
+
+    void setMain(String[] s) {   // 大きな文字Viewを文字列で埋める
+		chview.setCharByString(s);
+    }
+    void setS1(int x, int y,String s) { // 小さな文字(上)の1項目をセットする
+		s1view.setString(x,y,s);
+    }
+
+ // 指定されたユニットに数字(文字)をセットする。
+ 	void setLetter(Character c) {
+ 		if(cur != null) { // ユニット指定があるかどうか調べる
+ 			chview.setCharacter(cur.x, cur.y, c); // そこにセット
+ 			frame.repaint();//再描画
+ 		}
+ 	}
+
+    // 問題をセットする。
+    void setMondai(String[] m) {
+    	chview.setCharByString(m);
+    }
+
+    // チャレンジ文字列を得る。
+    String[] getCharaenge() {
+    	return chview.getCharenge();
+    }
+
+    @Override
+	public void mouseClicked(MouseEvent e) {
+		Point p = getUnit(e);
+		chview.rotateCharacter(p,false); // 文字を変更する
+		frame.repaint();
+		if(cur != null) { // 既に設定されているユニットがある
+			colview.setColor(cur.x, cur.y, null); // ユニットの色をなくす(透明)
+			cur = null;
+		}
+		cur = getUnit(e); // マウス位置のユニットを得る。ナル値の時は枠外をクリックしている。
+		if(cur != null) colview.setColor(cur.x, cur.y, Color.pink); // マウス位置のユニットに色を塗る
+		frame.repaint(); // 再描画
+
+	}
+ // 問題や答えの文字列の並びを得る（答え合わせページに詳細）
+ 	String[] getStrings(Element mondai,String tag) {
+ 		String s[];
+ 		NodeList nl = mondai.getElementsByTagName(tag);
+ 		s = new String[nl.getLength()];
+ 		for(int i = 0; i < nl.getLength() ;i++) {
+ 			try {
+ 				s[i] = nl.item(i).getFirstChild().getNodeValue();
+ 			} catch(Exception e) {
+ 				s[i] = "";
+ 			}
+ 		}
+ 		return s;
+ 	}
+	public void mousePressed(MouseEvent e) {	}
+	public void mouseReleased(MouseEvent e) {	}
+	public void mouseEntered(MouseEvent e) {	}
+	public void mouseExited(MouseEvent e) { 	}
+
+}
+

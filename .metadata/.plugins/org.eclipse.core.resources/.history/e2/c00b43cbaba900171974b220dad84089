@@ -1,0 +1,76 @@
+//BMI計算機、GridLayoutを使って表示
+//ファイル名：BMI.java
+
+import java.awt.BorderLayout;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.JPanel;
+
+
+public class BMI extends JFrame implements ActionListener {
+	JTextField textField1;
+	JTextField textField2;
+	JTextField textField3;
+	JButton keisan;
+
+	//コンストラクタ
+	BMI(String title){
+		super(title);
+
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(480,200);
+		setLocationByPlatform(true);
+
+		//レイアウトは縦3×横2のグリッド
+		setLayout(new GridLayout (5,2));
+		JLabel label1 =new JLabel("身長を入れて下さい");
+		label1.setHorizontalAlignment(JLabel.RIGHT);
+		label1.setVerticalAlignment(JLabel.CENTER);
+		textField1=new JTextField(20);
+		JLabel label2 =new JLabel("体重を入れて下さい");
+		label2.setHorizontalAlignment(JLabel.RIGHT);
+		label2.setVerticalAlignment(JLabel.CENTER);
+		textField2=new JTextField(20);
+		JLabel label3 =new JLabel("BMI");
+		label3.setHorizontalAlignment(JLabel.RIGHT);
+		label3.setVerticalAlignment(JLabel.CENTER);
+		textField3=new JTextField(20);
+
+
+
+
+		keisan =new JButton("計算");
+		keisan.addActionListener(this);
+
+		add(label1);
+		add(textField1);
+		add(label2);
+		add(textField2);
+		add(label3);
+		add(textField3);
+		add(keisan);
+
+	}
+
+	public static void main(String args[]) {
+		BMI frame = new BMI ("税込み");
+		frame.setVisible(true);
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		JButton btn= (JButton)e.getSource();
+		int h= Integer.parseInt(textField1.getText());
+		int w= Integer.parseInt(textField2.getText());
+		int komi =(w/h*h)*1000;
+		textField3.setText(""+komi);
+
+	}
+
+
+}

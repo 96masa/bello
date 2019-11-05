@@ -1,0 +1,102 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class mouse extends JFrame {
+	public mouse(String title) {
+		super(title);
+		setSize(650,650);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//終了ボタン
+		setLocationByPlatform(true);
+		setLayout(new FlowLayout());
+		
+		Image im = new ImageIcon("ue.jpg").getImage();
+		MousePanel2 panel = new MousePanel2 (im,this);
+		MousePanel1 panel1= new MousePanel1 (im,this);
+		add(panel);
+		add(panel1);
+	}
+	
+	public static void main (String args[]) {
+		mouse frame = new mouse("マウス操作");
+		frame.setVisible(true);
+	}
+}
+class MousePanel2 extends JPanel implements MouseListener{
+	int width=640,height=640;
+	Image image;
+	JFrame frame;
+	int x =width/2,y=height/2;
+	
+	MousePanel2(Image im,JFrame fr){
+		super();
+		image = im;
+		frame = fr;
+		
+		setMinimumSize(new Dimension(width,height));
+		setPreferredSize(new Dimension(width,height));
+		addMouseListener(this);
+	}
+	public void  paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(image, x, y, this);
+		
+		g.drawImage(image,x-image.getWidth(this)/2,
+				          y-image.getHeight(this)/2,this);
+		
+	}
+	public void mouseClicked(MouseEvent e) {
+		x=e.getX();
+		y=e.getY();
+		frame.repaint();
+	}
+	public void mouseEntered(MouseEvent arg0) {
+		
+	}
+	public void mouseExited(MouseEvent arg0) {
+		
+	}
+	public void mousePressed(MouseEvent arg0) {
+		
+	}
+	public void mouseReleased(MouseEvent arg0) {
+		
+	}
+}
+class MousePanel1 extends JPanel implements MouseMotionListener{
+	int width=640,height=640;
+	Image image;
+	JFrame frame;
+	int x=100,y=100;
+	
+	MousePanel1(Image im,JFrame fr){
+		super();
+		image =im;
+		frame =fr;
+		
+		setMinimumSize(new Dimension(width,height));
+		setPreferredSize(new Dimension(width,height));
+		addMouseMotionListener(this);
+	}
+	public void  paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(image, x, y, this);
+		
+		g.drawImage(image,x-image.getWidth(this)/2,
+				          y-image.getHeight(this)/2,this);
+	}
+	public void mouseMoved(MouseEvent e) {
+		x=e.getX();
+		y=e.getY();
+		frame.repaint();
+	}
+	public void mouseDragged(MouseEvent e)	{
+		
+	}
+		
+		
+	
+}
+
+
+

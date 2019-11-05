@@ -1,0 +1,93 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class mouse extends JFrame {
+	public mouse(String title) {
+		super(title);
+		setSize(650,650);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//終了ボタン
+		setLocationByPlatform(true);
+		setLayout(new FlowLayout());
+
+		//ファイルからイメージを配列として読み込む、ファイル名を指定
+		Image im[]=new Image[3];
+		im[0] = new ImageIcon("bou1.jpg").getImage();
+		im[1] = new ImageIcon("bou2.jpg").getImage();
+		im[2] = new ImageIcon("bou3.jpg").getImage();
+		MousePanel2 panel1= new MousePanel2 (im,this);//パネルを生成
+		add(panel1);//パネルをセット
+	}
+	//メインルーチン
+	public static void main (String args[]) {
+		mouse frame = new mouse("マウス操作");
+		frame.setVisible(true);
+	}
+}
+class MousePanel2 extends JPanel implements MouseListener,MouseMotionListener{
+	int width=640,height=640;//パネルの幅と高さ
+	Image image[];//描画するイメージ
+	JFrame frame;//親フレームを保持（再描画時に必要）
+	int x =width/2,y=height/2;//描画する位置
+	int i=0;//配列の変数
+
+	MousePanel2(Image[] im,JFrame fr){
+		super();//通常のパネルを作る
+		image = im;//イメージを保持
+		frame = fr;//親フレームを保持
+		//パネルの大きさをセット
+		setMinimumSize(new Dimension(width,height));
+		setPreferredSize(new Dimension(width,height));
+		addMouseListener(this);//マウスリスナーを装着
+		addMouseMotionListener(this);//マウスモーションリスナーを装着
+	}
+	//実際の描画を行うメソッド、必要な時に自動的に呼び出される。
+	public void  paintComponent(Graphics g) {
+		super.paintComponent(g);//画像のデフォルト動作
+		//座標値を中心に画像を描画する。
+		g.drawImage(image[i],x-image[i].getWidth(this)/2,
+					y-image[i].getHeight(this)/2,this);
+	}
+	//マウスがクリックされたとき呼び出される
+	public void mouseClicked(MouseEvent arg0) {
+		//今回は何もしない
+	}
+
+	//マウスがパネルに入っていた時に呼び出される
+	public void mouseEntered(MouseEvent arg0) {
+		//今回は何もしない
+	}
+
+	//マウスがパネルから出たとき
+	public void mouseExited(MouseEvent arg0) {
+		x=40;//画像のｘ座標の場所を指定
+		y=35;//画像のy座標の場所を指定
+		frame.repaint();//再描画
+	}
+
+	//マウスボタンが押されたとき呼び出される
+	public void mousePressed(MouseEvent arg0) {
+		//今回は何もしない
+	}
+
+	//マウスボタンが話されたとき位呼び出される
+	public void mouseReleased(MouseEvent arg0) {
+		//今回は何もしない
+	}
+
+	//マウスの移動を検出した時ｎ呼び出されるメソッド
+	public void mouseMoved(MouseEvent e) {
+		x=e.getX();//マウスのｘ座標を得る
+		y=e.getY();//マウスのｙ座標を得る
+		for(i++;i>=image.length;i=0) {//iが以上の時繰り替えす
+			i=0;
+		}
+		frame.repaint();
+	}
+
+	//マウスをドラッグしたまま移動したときに呼び出されるメソッド
+	public void mouseDragged(MouseEvent e)	{
+		//今回は何もしない
+	}
+}
+

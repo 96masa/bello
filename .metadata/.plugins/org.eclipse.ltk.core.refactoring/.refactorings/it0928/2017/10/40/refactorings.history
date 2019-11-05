@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Move element &apos;BMI.java&apos; to &apos;it1005&apos;&#x0D;&#x0A;- 元のプロジェクト: &apos;it0928&apos;&#x0D;&#x0A;- 宛先要素: &apos;it1005&apos;&#x0D;&#x0A;- オリジナル要素: &apos;BMI.java&apos;&#x0D;&#x0A;- リファクタリングされた要素の参照を更新" description="コンパイル単位を移動" destination="=it1005" element1="/src&lt;{BMI.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1507182270991" units="1" version="1.0"/>
+</session>

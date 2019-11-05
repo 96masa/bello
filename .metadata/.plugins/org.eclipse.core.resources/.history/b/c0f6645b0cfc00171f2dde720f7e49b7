@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Inroom>
+    <title>因子の部屋XMLバージョン</title>
+    <Mondai>
+        <question>     </question>
+        <question>     </question>
+        <question>     </question>
+        <question>     </question>
+        <question>     </question>
+        <question>     </question>
+        <question>     </question>
+        <question>     </question>
+        <question>     </question>
+        <answer>14235</answer>
+        <answer>23541</answer>
+        <answer>51423</answer>
+        <answer>45312</answer>
+        <answer>32154</answer>
+        <answer></answer>
+        <answer></answer>
+        <answer></answer>
+        <answer></answer>
+	</Mondai>
+    <Mondai>
+		<question>       </question>
+		<question>       </question>
+		<question>       </question>
+		<question>       </question>
+		<question>       </question>
+		<question>       </question>
+		<question>       </question>
+
+		<answer>4163572</answer>
+		<answer>1756234</answer>
+		<answer>3415726</answer>
+		<answer>6274351</answer>
+		<answer>5321647</answer>
+		<answer>2547163</answer>
+		<answer>7632415</answer>
+	</Mondai>
+	<item>
+	    <group>1,1,2,3,4</group>
+	    <group>5,5,2,3,4</group>
+	    <group>6,7,7,8,9</group>
+	    <group>6,10,10,8,9</group>
+	    <group>6,11,11,8,9</group>
+	</item>
+</Inroom>

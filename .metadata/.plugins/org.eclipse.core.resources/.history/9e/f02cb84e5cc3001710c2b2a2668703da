@@ -1,0 +1,31 @@
+import java.awt.Image;
+import java.awt.Point;
+import java.util.Random;
+
+import javax.swing.JPanel;
+
+class Enemy extends Thing{
+	int count =0;
+	Random rand;
+	Point dir;
+	Enemy(Image im,JPanel p){
+		super(im,p);
+		rand = new Random();
+		dir = new Point(rand.nextInt(3)-1,rand.nextInt(3)-1);
+		setLocation(rand.nextInt(panel.getWidth()),
+				rand.nextInt(panel.getHeight()));
+	}
+
+
+	void move(int mx,int my) {
+		x+=dir.x;
+		y+=dir.y;
+
+		count++;
+		if(count>=10) {
+			dir.x=rand.nextInt(3)-1;
+			dir.y=rand.nextInt(3)-1;
+			count=0;
+		}
+	}
+}

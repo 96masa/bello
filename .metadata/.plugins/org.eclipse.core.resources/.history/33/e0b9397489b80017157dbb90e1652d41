@@ -1,0 +1,71 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import java.awt.BorderLayout;
+
+public class mouse extends JFrame {
+	public mouse(String title) {
+		super(title);
+		setSize(650,650);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);//終了ボタン
+		setLocationByPlatform(true);
+		setLayout(new FlowLayout());
+		Image im[]=new Image[2];
+		im[0] = new ImageIcon("bou1.jpg").getImage();
+		im[1] = new ImageIcon("ue.jpg").getImage();
+		MousePanel2 panel1= new MousePanel2 (im,this);
+		add(panel1);
+		
+		JPanel p = new JPanel();
+	    ImageIcon icon1 = new ImageIcon("ue.jpg");
+	    JLabel label1 = new JLabel(icon1);
+	    p.add(label1);
+	    add(label1,BorderLayout.CENTER);
+	    
+	}
+
+	public static void main (String args[]) {
+		mouse frame = new mouse("マウス操作");
+		frame.setVisible(true);
+	}
+}
+class MousePanel2 extends JPanel implements MouseListener,MouseMotionListener{
+	int width=640,height=640;
+	Image image[];
+	JFrame frame;
+	int x =width/2,y=height/2;
+	int i;
+
+	MousePanel2(Image[] im,JFrame fr){
+		super();
+		image = im;
+		frame = fr;
+
+		setMinimumSize(new Dimension(width,height));
+		setPreferredSize(new Dimension(width,height));
+		addMouseListener(this);
+		addMouseMotionListener(this);
+	}
+	public void  paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(image[i],x-image[i].getWidth(this)/2,y-image[i].getHeight(this)/2,this);
+		
+	}
+	public void mouseClicked(MouseEvent e) {}
+	public void mouseEntered(MouseEvent arg0) {}
+	public void mouseExited(MouseEvent arg0) {	}
+	public void mousePressed(MouseEvent e) {}
+	public void mouseReleased(MouseEvent arg0) {
+		
+	}
+	public void mouseMoved(MouseEvent e) {
+		x=e.getX();
+		y=e.getY();
+		for(i++;i>=image.length;i=0) {
+			i=0;
+		}
+		frame.repaint();
+	}
+	public void mouseDragged(MouseEvent e)	{}
+}
+

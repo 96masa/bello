@@ -1,0 +1,68 @@
+//グラフィッククスを描画する画面に画像を表示する
+//ボタンに画像を張り付ける場合。
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class ImageStep4 extends JFrame implements ActionListener {
+	ImagePanel4 panel ;
+	JButton button;
+	public ImageStep4(String title) {
+		super(title);
+		setSize(470,320);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationByPlatform(true);
+		setLayout(new BorderLayout());
+		
+		//ファイルからイメージを読み込む　ファイル名を指定
+		Image im = new ImageIcon("ford-2705402__340.jpg").getImage();
+		panel = new ImagePanel4 (im);
+		add(panel,BorderLayout.CENTER);
+		
+		//ボタンに画像を張り付ける
+		button = new JButton(new ImageIcon(""));
+		button.addActionListener(this);
+		add(button,BorderLayout.SOUTH);
+	}
+	//メインルーチン
+	public static void main(String[] args)  {
+		ImageStep4 frame = new ImageStep4("");
+		frame.setVisible(true);
+	}
+	public void actionPerformed(ActionEvent e) {
+		JButton b =(JButton)e.getSource();
+		if(b==button) {
+			panel.moveImage();
+			repaint();
+		}
+	}
+}
+
+//イメージが描画できるパネルのクラス
+class ImagePanel4 extends JPanel {
+	int width=450,height=300;
+	Image image;
+	int x=10,y=10;
+	
+	//パネルを作るコンストラクタ。引数は描画したいイメージ
+	ImagePanel4(Image im) {
+		super();
+		image = im;
+		//パネルの大きさをセット
+		setMinimumSize(new Dimension(width,height));
+		setPreferredSize(new Dimension(width,height));
+	}
+	
+	//実査の描画を行うメソッド。必要なときに自動的に呼び出される。
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(image, x, y, this);
+	}
+	
+	//イメージを移動させるメソッド
+	public void moveImage() {
+		x+=10;
+		y+=10;
+		
+	}
+}

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Syakasyaka>
+    <title>シャカシャカXMLバージョン</title>
+    <Mondai>
+        <question>２□□□□３□２■</question>
+        <question>□□□□□□□□２</question>
+        <question>□□４□□□□□□</question>
+        <question>２■□□４□□□□</question>
+        <question>□□□■□□□□２</question>
+        <question>□□□□□□■■■</question>
+        <question>□■□□■□□□□</question>
+        <question>□□□４□□■□□</question>
+        <question>□■□□□□□□□</question>
+        <question>□２□□３□□■１</question>
+        <answer>２┘└┘└３┘└２■</answer>
+        <answer>┘□┌┐┌┘□□└２</answer>
+
+        <answer>┐┌４┘└┐□□□└</answer>
+        <answer>２■┘□┌４┐□□┌</answer>
+        <answer>┘└┐┌■┘└┐┌２</answer>
+        <answer>┐┌□┘└┐┌■■■</answer>
+        <answer>□■┘□┌■□□□□</answer>
+        <answer>□２┐┌４┘└■┘└</answer>
+        <answer>┘└■┘└┐□└┐┌</answer>
+        <answer>┐┌２┐┌３┐┌■１</answer>
+
+	</Mondai>
+    <Mondai>
+		<question>□２□□３□□□</question>
+		<question>□■□□□□□□</question>
+		<question>３□■□□□■■</question>
+		<question>□□□４□□□□</question>
+		<question>□□□□■２□□</question>
+		<question>３□□□■□□■</question>
+		<question>□□□□４□□■</question>
+		<question>□□□４□□□□</question>
+		<question>□□□□□□□□</question>
+		<question>■□□□２■□□</question>
+		<answer>┘└２┘└３┘└┘└</answer>
+		<answer>┐┌■┐□└┐┌┐┌</answer>
+		<answer>３┘└■┐□└■■２</answer>
+		<answer>┘□□└４┐┌□┘└</answer>
+		<answer>┐□□□└■２□┐┌</answer>
+		<answer>３┐□□┌■┘└■■</answer>
+		<answer>┘└┐┌４┘□┌■１</answer>
+		<answer>┐□└４┘□┌□┘└</answer>
+		<answer>□┐□└┐┌□┘□┌</answer>
+		<answer>■□┐┌２■□┐┌２</answer>
+	</Mondai>
+</Syakasyaka>

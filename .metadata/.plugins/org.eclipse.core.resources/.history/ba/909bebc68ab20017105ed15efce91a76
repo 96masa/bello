@@ -1,0 +1,234 @@
+//グラフィッククスを描画する画面に画像を表示する
+//ボタンに画像を張り付ける場合。
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class ImageStep4 extends JFrame implements ActionListener {
+	ImagePanel4 panel ;
+	JButton button;
+	JButton button1;
+	JButton button2;
+	JButton button3;
+	JButton button4;
+	JButton button5;
+	JButton button6;
+	JButton button7;
+	JButton button8;
+	JButton button9;
+
+	public ImageStep4(String title) {
+		super(title);
+		setSize(650,700);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationByPlatform(true);
+		setLayout(new BorderLayout());
+
+		//ファイルからイメージを読み込む　ファイル名を指定
+		Image im = new ImageIcon("cello-2830670__340.jpg").getImage();
+		panel = new ImagePanel4 (im);
+		add(panel,BorderLayout.CENTER);
+
+		//ボタンに画像を張り付ける
+		JPanel panel2 =new JPanel();
+		panel2.setLayout(new GridLayout(2,5));
+		button = new JButton(new ImageIcon("ue.jpg"));
+		button.addActionListener(this);
+		button1=new JButton(new ImageIcon("sita.jpg"));
+		button1.addActionListener(this);
+		button2=new JButton(new ImageIcon("hidari.jpg"));
+		button2.addActionListener(this);
+		button3=new JButton(new ImageIcon("migi.jpg"));
+		button3.addActionListener(this);
+		button4 = new JButton(new ImageIcon("migisita.jpg"));
+		button4.addActionListener(this);
+		button5=new JButton(new ImageIcon("hidariue.jpg"));
+		button5.addActionListener(this);
+		button6=new JButton(new ImageIcon("migiue.jpg"));
+		button6.addActionListener(this);
+		button7=new JButton(new ImageIcon("hidarisita.jpg"));
+		button7.addActionListener(this);
+		button8=new JButton(new ImageIcon("up.jpg"));
+		button8.addActionListener(this);
+		button9=new JButton(new ImageIcon("down.jpg"));
+		button9.addActionListener(this);
+
+		panel2.add(button);
+		panel2.add(button1);
+		panel2.add(button2);
+		panel2.add(button3);
+		panel2.add(button4);
+		panel2.add(button5);
+		panel2.add(button6);
+		panel2.add(button7);
+		panel2.add(button8);
+		panel2.add(button9);
+		add(panel2,BorderLayout.SOUTH);
+
+	}
+	//メインルーチン
+	public static void main(String[] args)  {
+		ImageStep4 frame = new ImageStep4("貼り付け+移動＋ボタンに画像+スピードup,down+はみ出さない");
+		frame.setVisible(true);
+	}
+	public void actionPerformed(ActionEvent e) {
+		JButton b =(JButton)e.getSource();
+		if(b==button) {//移動ボタンが押された。
+			panel.moveImage();//イメージを移動させる
+			repaint();//再描画
+		}
+		if(b==button1) {
+			panel.moveImage1();
+			repaint();
+		}
+		if(b==button2) {
+			panel.moveImage2();
+			repaint();
+		}
+		if(b==button3) {
+			panel.moveImage3();
+			repaint();
+		}
+		if(b==button4) {
+			panel.moveImage4();
+			repaint();
+		}
+		if(b==button5) {
+			panel.moveImage5();
+			repaint();
+		}
+		if(b==button6) {
+			panel.moveImage6();
+			repaint();
+		}
+		if(b==button7) {
+			panel.moveImage7();
+			repaint();
+		}
+		if(b==button8) {
+			panel.moveImage8();
+			repaint();
+		}
+		if(b==button9) {
+			panel.moveImage9();
+			repaint();
+		}
+	}
+}
+//イメージが描画できるパネルのクラス
+class ImagePanel4 extends JPanel {
+	int width=450,height=300;//パネルの幅と高さ
+	Image image;//描画するイメージ
+	int x=10,y=10,s=0,k=0;//画像の初期位置を（10,10）にセット、変数ｓ、ｋの初期値を０にする
+
+	//パネルを作るコンストラクタ。引数は描画したいイメージ
+	ImagePanel4(Image im) {
+		super();//通常のパネルを作る
+		image = im;//イメージを保持
+		//パネルの大きさをセット
+		setMinimumSize(new Dimension(width,height));
+		setPreferredSize(new Dimension(width,height));
+	}
+
+	//実査の描画を行うメソッド。必要なときに自動的に呼び出される。
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(image, x, y, this);
+	}
+
+	//イメージを移動させるメソッド
+	public void moveImage() {
+		if(k<10) {//変数ｋが１０未満であるときに実行される
+		y+=-10-s+k;//
+		}else {
+			k=9;
+		}
+		if(y<1) {//
+			y=300;
+		}
+	}
+	public void moveImage1() {
+		if(k<10) {
+		y+=10+s-k;
+		}else {
+			k=9;
+		}
+		if(y>300) {
+			y=0;
+		}
+	}
+	public void moveImage2() {
+		if(k<10) {
+			x+=-10-s+k;
+		}else {
+			k=9;
+		}
+		if(x<1) {
+			x=300;
+		}
+	}
+	public void moveImage3() {
+		if(k<10) {
+			x+=10+s-k;
+		}else {
+			k=9;
+		}
+		if(x>300) {
+			x=0;
+		}
+	}
+	public void moveImage4() {
+		if(k<10) {
+			x+=10+s-k;
+			y+=10+s-k;
+		}else {
+			k=9;
+		}
+		if(x>300 || y>300) {
+			x=0;
+			y=0;
+		}
+	}
+	public void moveImage5() {
+		if(k<10) {
+			x+=-10-s+k;
+			y+=-10-s+k;
+		}else {
+			k=9;
+		}
+		if(x<0|| y<0) {
+			x=300;
+			y=300;
+		}
+	}
+	public void moveImage6() {
+		if(k<10) {
+			x+=10+s-k;
+			y+=-10-s+k;
+		}else {
+			k=9;
+		}
+		if(x>300||y<0) {
+			x=0;
+			y=300;
+		}
+	}
+	public void moveImage7() {
+		if(k<10) {
+			x+=-10-s+k;
+			y+=10+s-k;
+		}else {
+			k=9;
+		}
+		if(x<0||y>300) {
+			x=300;
+			y=0;
+		}
+	}
+	public void moveImage8() {
+		s+=5;
+	}
+	public void moveImage9() {
+		k+=3;
+	}
+}

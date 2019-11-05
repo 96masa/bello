@@ -1,0 +1,181 @@
+import java.awt.*;
+import java.awt.event.*;
+import java.util.Random;
+import javax.swing.*;
+
+public class ArrayObj extends JFrame {
+	String imageNames[] = {"s_ufo.png","s_ufo1.png","s_ufo2.png","s_ufo3.png",
+			"ue.jpg","s_ufo4.png","bou1.jpg"};//敵を画像
+	public ArrayObj(String title) {
+		super(title);
+		setSize(650,650);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setLocationByPlatform(true);
+		setLayout(new FlowLayout());//レイアウトはnull以外
+
+		//
+		Image im[];
+		im = new Image[imageNames.length];
+		for(int i=0;i<im.length;i++) {
+			im[i] = new ImageIcon(imageNames[i]).getImage();
+		}
+		ArrayPanel1 panel =new ArrayPanel1(im,this);
+		add(panel);
+	}
+	//
+	public static void main(String args[]) {
+		ArrayObj frame = new ArrayObj("配列とオブジェクト");
+		frame.setVisible(true);
+	}
+}
+//
+class Explode extends  Thing{
+	int count = 200;
+	Explode(Image im,JPanel p){
+		super(im,p);
+	}
+	void move(int mx,int my) {
+		if(count <=0) {
+			setLocation(-hWidth,-hHeight);
+		}else {
+			count--;
+		}
+	}
+}
+
+class Enemy extends  Thing{
+	Enemy(Image im,JPanel p){
+		super(im,p);
+	}
+
+	void move(int mx,int my) {
+		if(x<mx) {
+			x--;
+			if(x<0) {x=0;}
+		}else if(x> mx) {
+			x++;
+			if(x>panel.getWidth()) {x = panel.getWidth();}
+		}
+		if(y<my) {
+			y--;
+			if(y<0) {y=0;}
+		}else if(y<my) {
+			y++;
+			if(y>panel.getHeight()) {y=panel.getHeight();}
+		}
+
+	}
+}
+
+class ArrayPanel1 extends JPanel implements MouseMotionListener,MouseListener{
+	int width=650,height=650;
+	Image image[];
+	JFrame frame;
+	Thing ufo;
+	int x = -100,y=-100;
+
+	Thing obj[];
+	int objNumber;
+
+	Random rand;
+	//パネルを作るコンストラクタ。引数は描画したいイメージ
+	ArrayPanel1(Image im[],JFrame fr){
+		super();
+		image =im;
+		frame =fr;
+		setMinimumSize(new Dimension(width,height));
+		setPreferredSize(new Dimension(width,height));
+
+		addMouseMotionListener(this);
+		addMouseListener(this);
+
+		ufo = new Thing(image[0],this);
+		obj = new Thing[10];
+		rand = new Random();
+
+		for(int i=0;i<obj.length;i++) {
+			int r =rand.nextInt(4);
+			if(r<3) {
+				obj[i]=new Nebura(image[3+r],this);
+			}else {
+				obj[i]= new Enemy(image[6],this);
+				obj[i].setLocation(rand.nextInt(getWidth()), rand.nextInt(getHeight()));
+			}
+		}
+	}
+	public int getWidth() {return width;}
+	public int getHeight() {return height;}
+
+	public void paintComponent(Graphics g) {
+		for(int i=0;i<obj.length;i++) {
+			if(obj[i]!=null) {
+				obj[i].draw(g);
+			}
+		}
+		ufo.draw(g);
+	}
+	public void mouseMoved(MouseEvent e) {
+		int x = e.getX();
+		int y = e.getY();
+		for(int i=0;i<obj.length;i++) {
+			if(obj[i]!=null) {
+				if(obj[i].getY()<0) {
+					obj[i] =null;
+				}else {
+					obj[i].move(x,y);
+				}
+			}
+		}
+		ufo.move(x,y);
+		frame.repaint();
+	}
+	public void mouseDragged(MouseEvent e) {}
+	public void mouseClicked(MouseEvent e) {
+		int flag =0;
+		for(int i=0;i<obj.length;i++) {
+			if(obj[i]!=null) {
+				//何もしない
+			}else if(ufo.hit(obj[i])) {
+				if(obj[i] instanceof Nebura) {
+					Thing p=new Explode(image[1],this);
+					p.setLocation(obj[i].getX(), obj[i].getY());
+					obj[i]=p;
+					flag++;
+				}else if(obj[i] instanceof Enemy) {
+					Thing p=new Explode(image[2],this);
+					p.setLocation(obj[i].getX(), obj[i].getY());
+					obj[i]=p;
+					flag++;
+				}
+			}
+		}
+		if(flag>0) {
+			frame.repaint();
+		}
+	}
+	//
+	public void mouseEntered(MouseEvent e) {}
+	public void mouseExited(MouseEvent e) {}
+	public void mousePressed(MouseEvent e) {}
+	public void mouseReleased(MouseEvent e) {}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
